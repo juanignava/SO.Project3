@@ -36,3 +36,10 @@ To run this project you can follow this steps:
 7. While the last steps's pings are being executed, repeat step 5 so that it will send the application message, notice that the time it takes to answer es bigger, this happens due to the attack.
 
 
+### Important links 
+
+https://www.redeszone.net/tutoriales/seguridad/hping3-manipular-paquetes-tcp-ip-ataques/
+
+https://www.keysight.com/us/en/assets/7019-0414/technical-overviews/Simulating-a-DDoS-Attack-in-Your-Own-Lab.pdf
+
+https://youtu.be/fGWkhmCp_js
