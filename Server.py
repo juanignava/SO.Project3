@@ -45,5 +45,5 @@ def ExecuteServer(serverSocket,messageSize):
 def RunServer(ip,port,size):
     server=CreateServer(ip,port)
     ExecuteServer(server,size)
-RunServer("127.0.0.1",17017,2048)
+RunServer("192.168.0.49",17017,2048)
 

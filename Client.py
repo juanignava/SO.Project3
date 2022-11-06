@@ -34,4 +34,4 @@ def ExecuteClient(clientSocket,ip,port,size):
     except:
         print("Error sending the message")
     clientSocket.close()
-ExecuteClient(CreateClienteSocket(),"127.0.0.1",17017,2048)
+ExecuteClient(CreateClienteSocket(),"192.168.0.49",17017,2048)
