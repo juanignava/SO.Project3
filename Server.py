@@ -36,11 +36,16 @@ def ExecuteServer(serverSocket,messageSize):
                 final_time = time.time()
                 response_time = final_time - init_time
                 answer="All right"
-                #answer += str(response_time)
+                answer += str(response_time)
                 connection.send(answer.encode())
         except:
             print("Error accepting the connection from client")
+            connection.close()
+            exit()
         connection.close()
+    serverSocket.shutdown(socket.SHUT_RDWR)
+    serverSocket.close()
+    print ("closed")
 
 def RunServer(ip,port,size):
     server=CreateServer(ip,port)
