@@ -41,7 +41,7 @@ def ExecuteServer(serverSocket,messageSize):
                     # main load of the server 
                     # add the file encryption in here
                     calc = i*i
-                    result = calc // i
+                    print(calc)
 
                 final_time = time.time()
                 # response the time taken
