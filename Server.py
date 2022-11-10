@@ -25,20 +25,19 @@ def ExecuteServer(serverSocket,messageSize):
             connection , clientAddress=serverSocket.accept()
             
             
-            while (message!="end"):
-                message=connection.recv(messageSize).decode()
-                print("Connection from: ", clientAddress)
-                if message:
-                    init_time = time.time()
-                    print("Message received: ",message)
-                    for i in range(10000):
-                        calc = i*i
-                        print(calc)
-                    final_time = time.time()
-                    response_time = final_time - init_time
-                    answer="All right"
-                    #answer += str(response_time)
-                    connection.send(answer.encode())
+            message=connection.recv(messageSize).decode()
+            print("Connection from: ", clientAddress)
+            if message:
+                init_time = time.time()
+                print("Message received: ",message)
+                for i in range(10000):
+                    calc = i*i
+                    print(calc)
+                final_time = time.time()
+                response_time = final_time - init_time
+                answer="All right"
+                #answer += str(response_time)
+                connection.send(answer.encode())
         except:
             print("Error accepting the connection from client")
         connection.close()
