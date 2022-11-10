@@ -9,28 +9,18 @@ def CreateClienteSocket():
     except:
         return "Error creating socket"
 
-def ExecuteClient(clientSocket,ip,port,size, message):
+def ExecuteClient(clientSocket,ip,port,size, message, file_name):
     init_time = time.time()
     clientSocket.connect((ip,port))
     
-    #try:
-    #        while(message!="end"):
-    #message= input("Type your message to server: ")
-    """
-    if (count < 100):
-        message = "test " + str(count)
-        count += 1
-    else:
-        message = "end"
-    """
-
-    #time.sleep(0.1)
     
     clientSocket.send(message.encode())
     print("Message sent: ", message)
     answer=clientSocket.recv(size).decode()
+
     final_time = time.time()
     print("Response from server: ", answer)
+    
     response_time = final_time - init_time
     print("Time taken: ", response_time)
     
@@ -39,4 +29,4 @@ def ExecuteClient(clientSocket,ip,port,size, message):
     clientSocket.close()
 
 if __name__ == "__main__":
-    ExecuteClient(CreateClienteSocket(),"192.168.0.25",17017,2048, sys.argv[1])
+    ExecuteClient(CreateClienteSocket(),"192.168.0.25",17017,2048, sys.argv[1], sys.argv[2])
