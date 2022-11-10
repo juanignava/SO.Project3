@@ -42,9 +42,9 @@ def ExecuteServer(serverSocket,messageSize):
         except:
             print("Error accepting the connection from client")
         connection.close()
-        
+
 def RunServer(ip,port,size):
     server=CreateServer(ip,port)
     ExecuteServer(server,size)
-RunServer("192.168.0.49",17017,2048)
+RunServer("192.168.0.25",17017,2048)
 
