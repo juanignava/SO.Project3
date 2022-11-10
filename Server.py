@@ -49,6 +49,8 @@ def ExecuteServer(serverSocket,messageSize):
 
 def RunServer(ip,port,size):
     server=CreateServer(ip,port)
+    if isinstance(server, str):
+        return  print("Error creating server")
     ExecuteServer(server,size)
 RunServer("192.168.0.25",17017,2048)
 
