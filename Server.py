@@ -17,10 +17,10 @@ def CreateServer(ip,port): # ip->id, port-> "channel"
         return "ip or port incorrect"
 def ExecuteServer(serverSocket,messageSize):
     message=""
-    print("Waiting clients")
-    serverSocket.listen(1)
-    
     while message!="end":    
+        print("Waiting clients")
+        serverSocket.listen(1)
+    
         try:
             connection , clientAddress=serverSocket.accept()
             
@@ -36,12 +36,13 @@ def ExecuteServer(serverSocket,messageSize):
                         print(calc)
                     final_time = time.time()
                     response_time = final_time - init_time
-                    answer="All right time: "
-                    answer += str(response_time)
+                    answer="All right"
+                    #answer += str(response_time)
                     connection.send(answer.encode())
         except:
             print("Error accepting the connection from client")
         connection.close()
+        
 def RunServer(ip,port,size):
     server=CreateServer(ip,port)
     ExecuteServer(server,size)

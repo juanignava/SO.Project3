@@ -9,29 +9,34 @@ def CreateClienteSocket():
     except:
         return "Error creating socket"
 
-def ExecuteClient(clientSocket,ip,port,size):
+def ExecuteClient(clientSocket,ip,port,size, message):
+    init_time = time.time()
     clientSocket.connect((ip,port))
-    message= "begin"
-    count = 0
-    try:
-            while(message!="end"):
-                message= input("Type your message to server: ")
-                """
-                if (count < 100):
-                    message = "test " + str(count)
-                    count += 1
-                else:
-                    message = "end"
-                """
+    
+    #try:
+    #        while(message!="end"):
+    #message= input("Type your message to server: ")
+    """
+    if (count < 100):
+        message = "test " + str(count)
+        count += 1
+    else:
+        message = "end"
+    """
 
-                #time.sleep(0.1)
-
-                clientSocket.send(message.encode())
-                print("Message sent: ", message)
-                answer=clientSocket.recv(size).decode()
-                print("Response from server: ", answer)
-                
-    except:
-        print("Error sending the message")
+    #time.sleep(0.1)
+    
+    clientSocket.send(message.encode())
+    print("Message sent: ", message)
+    answer=clientSocket.recv(size).decode()
+    final_time = time.time()
+    print("Response from server: ", answer)
+    response_time = final_time - init_time
+    print("Time taken: ", response_time)
+    
+    #except:
+        #print("Error sending the message")
     clientSocket.close()
-ExecuteClient(CreateClienteSocket(),"192.168.0.49",17017,2048)
+
+if __name__ == "__main__":
+    ExecuteClient(CreateClienteSocket(),"192.168.0.25",17017,2048, sys.argv[1])
