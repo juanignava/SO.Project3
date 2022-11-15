@@ -27,7 +27,7 @@ def ExecuteClient(clientSocket,ip,port,size, message):
     data = file.read()
     init_time = time.time()
     #Send filename
-    clientSocket.send("test.txt".encode(FORMAT))
+    clientSocket.send("test2.txt".encode(FORMAT))
     msg = clientSocket.recv(SIZE).decode(FORMAT)
     print("Message received {msg}")
 
@@ -42,7 +42,6 @@ def ExecuteClient(clientSocket,ip,port,size, message):
     #close connection 
     clientSocket.close()
     final_time = time.time()
-    print("Response from server: ", answer)
     
     # display time taken
     response_time = final_time - init_time
