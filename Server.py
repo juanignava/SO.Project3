@@ -72,6 +72,8 @@ def ExecuteServer(serverSocket,messageSize):
 
         #Receiving the file data from the client
         data = connection.recv(SIZE).decode(FORMAT)
+        print("Data received from file")
+        print(data)
         print("Receiving the file data")
         file.write(data)
         connection.send("File data received".encode(FORMAT))
