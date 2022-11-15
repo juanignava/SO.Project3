@@ -1,4 +1,4 @@
-IP=192.168.0.25
+IP=192.168.5.248
 TEST_MESSAGE=test
 END_MESSAGE=end
 
@@ -7,6 +7,9 @@ client_end:
 
 client:
 	python3 Client.py $(IP) $(TEST_MESSAGE)
+
+client_attacker:
+	python3 Client_attacker.py $(IP)
 
 queue:
 	python3 Client_queue.py
