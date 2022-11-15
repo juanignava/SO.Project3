@@ -4,6 +4,9 @@ import socket
 import sys
 import time
 
+
+FORMAT = "utf-8"
+SIZE = 1024
 """
 This method creates a TCP socket server
 input: ip and port needed to create the server
@@ -26,29 +29,37 @@ def ExecuteServer(serverSocket,messageSize):
     message=""
 
     # server will continue receiving messages until it receives the message end
-    while message!="end":    
+    while True:    
         print("Waiting clients")
         serverSocket.listen(1)
 
         try:
             connection , clientAddress=serverSocket.accept()
-            message=connection.recv(messageSize).decode()
             print("Connection from: ", clientAddress)
-            if message:
-                init_time = time.time()
-                print("Message received: ",message)
-                for i in range(10000):
-                    # main load of the server 
-                    # add the file encryption in here
-                    calc = i*i
-                    print(calc)
 
-                final_time = time.time()
-                # response the time taken
-                response_time = final_time - init_time
-                answer= "Process time in the server: "
-                answer += str(response_time)
-                connection.send(answer.encode())
+            init_time = time.time()
+            #Receiving the file name
+            filename=connection.recv(SIZE).decode(FORMAT)
+            file = open(filename, "w")
+            connection.send("Filename received.".encode(FORMAT))
+
+            #Receiving the file data from the client
+            data = connection.recv(SIZE).decode(FORMAT)
+            print("Receiving the file data")
+            file.write(data)
+            connection.send("File data received".encode(FORMAT))
+
+            #Close file
+            file.close()
+
+            #Close connection
+            connection.close()
+            print("Disconnected")
+            final_time = time.time()
+            # response the time taken
+            response_time = final_time - init_time
+            answer= "Process time in the server: "
+            print(answer + "  :" + response_time)
         except:
             print("Error accepting the connection from client")
             connection.close()
