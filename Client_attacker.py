@@ -1,4 +1,4 @@
-import _thread
+import threading
 import sys
 import os
 import time
@@ -8,6 +8,7 @@ FORMAT = "utf-8"
 SIZE = 1024
 
 def check_ping(thread_name, ip, port):
+    """
     try:
         clientSocket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     except:
@@ -41,6 +42,8 @@ def check_ping(thread_name, ip, port):
     response_time = final_time - init_time
     print("Time taken: ", response_time)
     clientSocket.close()
+    """
+    os.system("make client")
     
 def create_threads(ip, port):
     counter = 0
@@ -48,7 +51,8 @@ def create_threads(ip, port):
     thread_list = []
     while (counter < 100):
         thread_actual_name = thread_name + str(counter)
-        t = _thread.start_new_thread( check_ping, (thread_actual_name, ip, port) )
+        t = threading.Thread( target=check_ping, args=(thread_actual_name, ip, port,) )
+        t.start()
         thread_list.append(t)
         counter += 1
     for x in thread_list:
@@ -58,15 +62,16 @@ def create_threads(ip, port):
 
 def call_threads(ip, port):
     # Create threads as follows
-    try:
-        create_threads(ip, port)
-
+    #try:
+    create_threads(ip, port)
+    """
     except:
         print ("Error: unable to start threads")
         exit()
 
     while 1:
         pass
+    """
 
 if __name__ == "__main__":
     call_threads(sys.argv[1], 17017)
