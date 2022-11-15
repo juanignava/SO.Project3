@@ -60,7 +60,7 @@ def ExecuteServer(serverSocket,messageSize):
     # server will continue receiving messages until it receives the message end
     while True:    
         print("Waiting clients")
-        serverSocket.listen(1)
+        serverSocket.listen(100)
         connection , clientAddress=serverSocket.accept()
         print("Connection from: ", clientAddress)
 
@@ -73,7 +73,6 @@ def ExecuteServer(serverSocket,messageSize):
         #Receiving the file data from the client
         data = connection.recv(SIZE).decode(FORMAT)
         print("Data received from file")
-        print(data)
         print("Receiving the file data")
         file.write(data)
         
@@ -88,10 +87,9 @@ def ExecuteServer(serverSocket,messageSize):
         final_time = time.time()
         # response the time taken
         response_time = final_time - init_time
-        answer= "Process time in the server: "
-        print(answer + "  :" + str(response_time))
+        answer= "Process time in the server: " + str(response_time)
 
-        connection.send("File data received".encode(FORMAT))
+        connection.send(answer.encode(FORMAT))
         #Close connection
         connection.close()
         print("Disconnected")
