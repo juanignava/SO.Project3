@@ -33,7 +33,6 @@ def ExecuteClient(clientSocket,ip,port,size, message):
 
     #Send file data
     print("Contents of the file are: ")
-    print(data)
     clientSocket.send(data.encode(FORMAT))
     msg = clientSocket.recv(SIZE).decode(FORMAT)
     print("message received " + msg)

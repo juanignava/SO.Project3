@@ -76,14 +76,9 @@ def ExecuteServer(serverSocket,messageSize):
         print(data)
         print("Receiving the file data")
         file.write(data)
-        connection.send("File data received".encode(FORMAT))
-
+        
         #Close file
         file.close()
-
-        #Close connection
-        connection.close()
-        print("Disconnected")
 
         GenerateKey()
         key = LoadKey()
@@ -95,6 +90,11 @@ def ExecuteServer(serverSocket,messageSize):
         response_time = final_time - init_time
         answer= "Process time in the server: "
         print(answer + "  :" + str(response_time))
+
+        connection.send("File data received".encode(FORMAT))
+        #Close connection
+        connection.close()
+        print("Disconnected")
 
 """
 Function that runs a server based on the inputs
