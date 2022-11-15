@@ -3,10 +3,39 @@ from http import server
 import socket 
 import sys
 import time
+from cryptography.fernet import Fernet
 
 
 FORMAT = "utf-8"
 SIZE = 1024
+
+"""
+This method creates, writes and saves the key.
+"""
+def GenerateKey():
+    key = Fernet.generate_key()
+    with open("clave.key", "wb") as file_key:
+        file_key.write(key)
+
+"""
+This method gets the key
+output: key from the key file
+"""
+def LoadKey():
+    return open("clave.key", "rb").read()
+
+"""
+This method encrypts a file
+input: name of the file to encrypt and the key to use
+"""
+def encript(filename, key):
+    f = Fernet(key)
+    with open(filename, "rb") as file:
+        file_info = file.read()
+    encrypted_data = f.encrypt(file_info)
+    with open(filename, "wb") as file:
+        file.write(encrypted_data)
+
 """
 This method creates a TCP socket server
 input: ip and port needed to create the server
@@ -32,44 +61,38 @@ def ExecuteServer(serverSocket,messageSize):
     while True:    
         print("Waiting clients")
         serverSocket.listen(1)
+        connection , clientAddress=serverSocket.accept()
+        print("Connection from: ", clientAddress)
 
-        try:
-            connection , clientAddress=serverSocket.accept()
-            print("Connection from: ", clientAddress)
+        init_time = time.time()
+        #Receiving the file name
+        filename=connection.recv(SIZE).decode(FORMAT)
+        file = open(filename, "w")
+        connection.send("Filename received.".encode(FORMAT))
 
-            init_time = time.time()
-            #Receiving the file name
-            filename=connection.recv(SIZE).decode(FORMAT)
-            file = open(filename, "w")
-            connection.send("Filename received.".encode(FORMAT))
+        #Receiving the file data from the client
+        data = connection.recv(SIZE).decode(FORMAT)
+        print("Receiving the file data")
+        file.write(data)
+        connection.send("File data received".encode(FORMAT))
 
-            #Receiving the file data from the client
-            data = connection.recv(SIZE).decode(FORMAT)
-            print("Receiving the file data")
-            file.write(data)
-            connection.send("File data received".encode(FORMAT))
+        #Close file
+        file.close()
 
-            #Close file
-            file.close()
-
-            #Close connection
-            connection.close()
-            print("Disconnected")
-            final_time = time.time()
-            # response the time taken
-            response_time = final_time - init_time
-            answer= "Process time in the server: "
-            print(answer + "  :" + response_time)
-        except:
-            print("Error accepting the connection from client")
-            connection.close()
-            exit()
+        #Close connection
         connection.close()
-    
-    # shutdown the server once finished
-    serverSocket.shutdown(socket.SHUT_RDWR)
-    serverSocket.close()
-    print ("closed")
+        print("Disconnected")
+
+        GenerateKey()
+        key = LoadKey()
+        encript(filename, key)
+        
+
+        final_time = time.time()
+        # response the time taken
+        response_time = final_time - init_time
+        answer= "Process time in the server: "
+        print(answer + "  :" + str(response_time))
 
 """
 Function that runs a server based on the inputs
