@@ -2,6 +2,8 @@ import socket
 import sys
 import time
 
+FORMAT = "utf-8"
+SIZE = 1024
 """
 This function creates the client socket with TCP
 output: the client socket instance"""
@@ -17,15 +19,29 @@ This function connects to the server, sends a message and then closes the connec
 input: clients, ip, port and size to create a correct conenection. message
     to indicate the texto to share with the server"""
 def ExecuteClient(clientSocket,ip,port,size, message):
-    init_time = time.time()
-    clientSocket.connect((ip,port))
     
-    # Send message
-    clientSocket.send(message.encode())
-    print("Message sent: ", message)
-    answer=clientSocket.recv(size).decode()
+    clientSocket.connect((ip,port))
+
+    #open file
+    file = open("test.txt")
+    data = file.read()
+    init_time = time.time()
+    #Send filename
+    clientSocket.send("test2.txt".encode(FORMAT))
+    msg = clientSocket.recv(SIZE).decode(FORMAT)
+    print("Message received {msg}")
+
+    #Send file data
+    clientSocket.send(data.encode(FORMAT))
+    msg = clientSocket.recv(SIZE).decode(FORMAT)
+    print("message received {msg}")
+
+    #close file
+    file.close()
+
+    #close connection 
+    clientSocket.close()
     final_time = time.time()
-    print("Response from server: ", answer)
     
     # display time taken
     response_time = final_time - init_time
