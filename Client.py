@@ -21,12 +21,12 @@ input: clients, ip, port and size to create a correct conenection. message
     to indicate the texto to share with the server"""
 def ExecuteClient(clientSocket, ip, port, src_filename, dest_filename):
     
+    init_time = time.time()
     # connect socket
     clientSocket.connect((ip,port))
 
     # read and send the file
     file = open(src_filename)
-    init_time = time.time()
     line = file.readline()
     counter = 1
     while (line != ""):
