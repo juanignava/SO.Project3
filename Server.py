@@ -31,8 +31,8 @@ input: name of the file to encrypt and the key to use
 """
 def encript(filename, key):
     en_filename = "en_" + filename
-    file = open(filename , "r")
-    en_file = open(en_filename, "w")
+    file = open("savedFiles/"+filename , "r")
+    en_file = open("encryptedFiles/"+en_filename, "w")
 
     line = file.readline()
     while(line != ""):
@@ -43,22 +43,13 @@ def encript(filename, key):
         # encrypt the text by adding 20 to each ascii character
         for char in line:
             char_ascii = ord(char)
-            en_char = char(char_ascii + 20)
-            en_line += en_char
+            en_char = chr(char_ascii + 20)
+            en_line = en_line + en_char
         en_file.write(en_line)
         line = file.readline()
     
     file.close()
     en_file.close()
-            
-    """
-    f = Fernet(key)
-    with open(filename, "rb") as file:
-        file_info = file.read()
-    encrypted_data = f.encrypt(file_info)
-    with open(filename, "wb") as file:
-        file.write(encrypted_data)
-    """
 
 """
 This method creates a TCP socket server
@@ -115,10 +106,10 @@ def ExecuteServer(serverSocket):
         while (message != "finished"):
             filename, data = separateInfo(message)
             if (firstLine):
-                file = open(filename, 'w')
+                file = open("savedFiles/"+filename , 'w')
                 firstLine = False
             else:
-                file = open(filename, 'a')
+                file = open("savedFiles/"+filename , 'a')
             file.write(data)
             connection.send("line received:".encode(FORMAT))
             message = connection.recv(SIZE).decode(FORMAT)
