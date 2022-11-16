@@ -3,10 +3,10 @@ TEST_MESSAGE=test
 END_MESSAGE=end
 
 client_end:
-	python3 Client.py $(IP) $(END_MESSAGE)
+	python3 Client.py $(IP) end
 
 client:
-	python3 Client.py $(IP) $(TEST_MESSAGE)
+	python3 Client.py $(IP) $(filename)
 
 client_attacker:
 	python3 Client_attacker.py $(IP)

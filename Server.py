@@ -51,6 +51,17 @@ def CreateServer(ip,port):
     else:
         return "ip or port incorrect"
 
+def separateInfo(message):
+    char_num = 0
+    for char in message:
+        if (char != ':'):
+            char_num += 1
+            continue
+        filename = message[:char_num]
+        data = message[char_num+1:]
+        return filename, data
+        
+
 """
 This method executes the server that is constantly waiting for clients
 input: server created with TCP and the size of the messages that will be sent"""
@@ -66,22 +77,22 @@ def ExecuteServer(serverSocket,messageSize):
 
         init_time = time.time()
         #Receiving the file name
-        filename=connection.recv(SIZE).decode(FORMAT)
-        file = open(filename, "w")
-        connection.send("Filename received.".encode(FORMAT))
+        message=connection.recv(SIZE).decode(FORMAT)
+        filename = ""
+        while (message != "finished"):
+            filename, data = separateInfo(message)
+            file = open(filename, 'a')
+            file.write(data)
 
-        #Receiving the file data from the client
-        data = connection.recv(SIZE).decode(FORMAT)
-        print("Data received from file")
-        print("Receiving the file data")
-        file.write(data)
-        
-        #Close file
-        file.close()
+            message = connection.recv(SIZE).decode(FORMAT)
+            
+            
+            #Close file
+            file.close()
 
         GenerateKey()
         key = LoadKey()
-        encript(filename, key)
+        #encript(filename, key)
         
 
         final_time = time.time()

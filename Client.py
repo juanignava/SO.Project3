@@ -18,12 +18,29 @@ def CreateClientSocket():
 This function connects to the server, sends a message and then closes the connection
 input: clients, ip, port and size to create a correct conenection. message
     to indicate the texto to share with the server"""
-def ExecuteClient(clientSocket,ip,port,size, message):
+def ExecuteClient(clientSocket,ip,port,size, filename):
     
     clientSocket.connect((ip,port))
 
     #open file
-    file = open("test.txt")
+    file = open(filename)
+
+    init_time = time.time()
+    server_time = 0
+    line = file.readline()
+    while (line != ""):
+        if (line == '\n'):
+            line = file.readline()
+            counter += 1
+            continue
+        message = filename + ":" + line
+        clientSocket.send(message.enconde(FORMAT))
+        response_msg = clientSocket.recv(SIZE).decode(FORMAT)
+        server_time += float(response_msg)
+        line = file.readline()
+
+    clientSocket.send("finished".enconde(FORMAT))
+    """
     data = file.read()
     init_time = time.time()
     #Send filename
@@ -36,6 +53,8 @@ def ExecuteClient(clientSocket,ip,port,size, message):
     clientSocket.send(data.encode(FORMAT))
     msg = clientSocket.recv(SIZE).decode(FORMAT)
     print("message received: " + msg)
+    """
+    print("Server time -> ", str(server_time))
 
     #close file
     file.close()
