@@ -11,3 +11,6 @@ server:
 
 clean_thread:
 	rm Thread*
+
+decrypt:
+	python3 decrypt $(filename)
