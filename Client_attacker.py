@@ -1,41 +1,32 @@
-import _thread
+import threading
 import sys
 import os
 
-def check_ping(thread_name, ip):
-    response = os.system("ping -c 100 " + ip)
-    # and then check the response...
-    if response == 0:
-        pingstatus = "Network Active"
-    else:
-        pingstatus = "Network Error"
+AMOUNT_THREADS = 100
 
-    print(thread_name + ": ", response)
+def send_file(thread_name, ip, port):
+    dest_file = thread_name+".txt"
+    os.system("make client src_filename=test.txt dest_filename="+dest_file)
     
-def create_threads(ip):
+def create_threads(ip, port):
     counter = 0
     thread_name = "Thread-"
     thread_list = []
-    while (counter < 1000):
+
+    # crete threads
+    while (counter < AMOUNT_THREADS):
         thread_actual_name = thread_name + str(counter)
-        t = _thread.start_new_thread( check_ping, (thread_actual_name, ip, ) )
+        t = threading.Thread( target=send_file, args=(thread_actual_name, ip, port,) )
+        t.start()
         thread_list.append(t)
         counter += 1
+
+    # wait for threads to end
     for x in thread_list:
         x.join()
 
     return
 
-def call_threads(ip):
-    # Create threads as follows
-    try:
-        create_threads(ip)
-
-    except:
-        print ("Error: unable to start threads")
-
-    while 1:
-        pass
-
 if __name__ == "__main__":
-    call_threads(sys.argv[1])
+    ip = sys.argv[1]
+    create_threads(ip, 17017)

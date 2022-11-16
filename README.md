@@ -11,10 +11,6 @@ Ping flood atack
 
 - Configure the virtual machine Network with the `Attached to` option as `Bridged Adapter` and with the Name `wlp2s0`
 
-- In the local machine install hping3 by running `sudo apt install hping3`
-
-- Verify the instalation with `hping3 --version`
-
 - Get the ip address of the virtual machine and save this number.
 
 ### How to run
@@ -25,15 +21,15 @@ To run this project you can follow this steps:
 
 2. Run the server in the virtual machine with the command `make server`
 
-3. Change the client's code ip address to the one obtained in the last section.
+3. Change the makefiles IP variable to the one obtained in the last section.
 
-4. Run the client in the local machine by running `make client`
+4. Run the client in the local machine by running `make client src_filename=<your source filename> dest_filename=<your destination filename>` note that the names of the files will be added with the txt extension. For example : `make client src_filename=test.txt dest_filename=test4.txt`
 
-5. The console indicates you that you can send messages to the server and you will receive the time it took the server to handle your request. Keep these times in mind.
+5. At the end of the analysis the program prints the server time, the total time and their difference which is the connection time. 
 
-6. Open other console and run the command `make hping` this is the attack, it will send a predefined amount of packages thourgh socket communication to the server.
+6. In order to implement the attack open another terminal and run the command `make client_attacker` and while this is running execute the step 4.
 
-7. While the last steps's pings are being executed, repeat step 5 so that it will send the application message, notice that the time it takes to answer es bigger, this happens due to the attack.
+7. You'll notice a big difference in the results and these numbers represent the impact of the attack.
 
 
 ### Important links 

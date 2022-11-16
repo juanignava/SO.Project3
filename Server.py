@@ -8,6 +8,7 @@ from cryptography.fernet import Fernet
 
 FORMAT = "utf-8"
 SIZE = 1024
+MAX_AMOUNT_CLIENTS = 100
 
 """
 This method creates, writes and saves the key.
@@ -39,7 +40,8 @@ def encript(filename, key):
 """
 This method creates a TCP socket server
 input: ip and port needed to create the server
-output: the server or a string in case there is a mistake"""
+output: the server or a string in case there is a mistake
+"""
 def CreateServer(ip,port):
     if isinstance(port,int) and isinstance(ip,str):
         try:
@@ -52,58 +54,82 @@ def CreateServer(ip,port):
         return "ip or port incorrect"
 
 """
-This method executes the server that is constantly waiting for clients
-input: server created with TCP and the size of the messages that will be sent"""
-def ExecuteServer(serverSocket,messageSize):
-    message=""
+This method separates the message received into the
+file where the message must be saved and the data of
+the message itself
+"""
+def separateInfo(message):
+    char_num = 0
+    for char in message:
+        if (char != ':'):
+            char_num += 1
+            continue
+        filename = message[:char_num]
+        data = message[char_num+1:]
+        return filename, data
+        
 
-    # server will continue receiving messages until it receives the message end
+"""
+This method executes the server that is constantly waiting for clients
+input: server created with TCP and the size of the messages that will be sent
+"""
+def ExecuteServer(serverSocket):
+
+    # Server will continue receiving messages until the process ends
     while True:    
         print("Waiting clients")
-        serverSocket.listen(1)
-        connection , clientAddress=serverSocket.accept()
+        serverSocket.listen(MAX_AMOUNT_CLIENTS)
+        connection, clientAddress = serverSocket.accept()
         print("Connection from: ", clientAddress)
 
+        # calculate the server analysis time
         init_time = time.time()
-        #Receiving the file name
-        filename=connection.recv(SIZE).decode(FORMAT)
-        file = open(filename, "w")
-        connection.send("Filename received.".encode(FORMAT))
+        message=connection.recv(SIZE).decode(FORMAT)
+        filename = ""
+        firstLine =True
 
-        #Receiving the file data from the client
-        data = connection.recv(SIZE).decode(FORMAT)
-        print("Receiving the file data")
-        file.write(data)
-        connection.send("File data received".encode(FORMAT))
+        # contruct the file until receives the finished message
+        while (message != "finished"):
+            filename, data = separateInfo(message)
+            if (firstLine):
+                file = open(filename, 'w')
+                firstLine = False
+            else:
+                file = open(filename, 'a')
+            file.write(data)
+            connection.send("line received:".encode(FORMAT))
+            message = connection.recv(SIZE).decode(FORMAT)
+            
+            #Close file
+            file.close()
 
-        #Close file
-        file.close()
+        # encrypt the file with a key
+        GenerateKey()
+        key = LoadKey()
+        encript(filename, key)
+        
+        # calculate and send response time
+        final_time = time.time()
+        response_time = final_time - init_time
+        answer= str(response_time)
+        connection.send(answer.encode(FORMAT))
 
         #Close connection
         connection.close()
         print("Disconnected")
 
-        GenerateKey()
-        key = LoadKey()
-        encript(filename, key)
-        
-
-        final_time = time.time()
-        # response the time taken
-        response_time = final_time - init_time
-        answer= "Process time in the server: "
-        print(answer + "  :" + str(response_time))
-
 """
 Function that runs a server based on the inputs
 input: ip and port of the server and also the size of the
-    messages in the server"""
-def RunServer(ip,port,size):
+    messages in the server
+"""
+def RunServer(ip,port):
     server=CreateServer(ip,port)
     if isinstance(server, str):
         return  print(server)
-    ExecuteServer(server,size)
+    ExecuteServer(server)
 
 if __name__ == "__main__":
-    RunServer(sys.argv[1],17017,2048)
+    ip = sys.argv[1]
+    RunServer(ip,17017)
 
