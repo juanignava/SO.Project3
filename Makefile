@@ -6,7 +6,7 @@ client_end:
 	python3 Client.py $(IP) end
 
 client:
-	python3 Client.py $(IP) $(filename)
+	python3 Client.py $(IP) $(src_filename) $(dest_filename)
 
 client_attacker:
 	python3 Client_attacker.py $(IP)

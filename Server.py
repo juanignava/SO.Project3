@@ -79,12 +79,19 @@ def ExecuteServer(serverSocket,messageSize):
         #Receiving the file name
         message=connection.recv(SIZE).decode(FORMAT)
         filename = ""
+        firstLine =True
         while (message != "finished"):
             filename, data = separateInfo(message)
-            file = open(filename, 'a')
+            if (firstLine):
+                file = open(filename, 'w')
+                firstLine = False
+            else:
+                file = open(filename, 'a')
             file.write(data)
 
+            connection.send("line received:".encode(FORMAT))
             message = connection.recv(SIZE).decode(FORMAT)
+            
             
             
             #Close file
