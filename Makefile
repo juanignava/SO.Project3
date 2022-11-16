@@ -10,7 +10,8 @@ server:
 	python3 Server.py $(IP)
 
 clean_thread:
-	rm Thread*
+	rm encryptedFiles/*
+	rm savedFiles/*
 
 decrypt:
-	python3 decrypt $(filename)
+	python3 decrypt.py $(filename)

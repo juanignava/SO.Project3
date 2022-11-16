@@ -1,3 +1,5 @@
+import sys
+
 """
 Function that decrypts the encrypted file
 and prints the original file in terminal
@@ -10,6 +12,7 @@ def decryptFile(filename):
             char_ascii = ord(char)
             des_char = chr(char_ascii - 20)
             print(des_char, end="")
+        line = file.readline()
 
 if __name__ == "__main__":
     filename = sys.argv[1]
