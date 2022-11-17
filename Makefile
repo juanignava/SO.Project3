@@ -1,4 +1,4 @@
-IP=172.20.10.4
+IP=172.20.10.14
 
 client:
 	python3 Client.py $(IP) $(src_filename) $(dest_filename)
